@@ -59,7 +59,7 @@ export default class App extends React.Component {
     const alarmDate = dayjs(this.state.date)
     const difference = currentDate.diff(alarmDate, 'hours', true)
 
-    return difference.toFixed(2)
+    return Math.abs(difference.toFixed(2))
   }
 
   openTimePicker() {
