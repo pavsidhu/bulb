@@ -6,6 +6,7 @@ import DateTimePicker from 'react-native-modal-datetime-picker'
 import dayjs from 'dayjs'
 
 import Time from './components/Time'
+import Options from './components/Options'
 import config from './config.json'
 import styles from './styles'
 
@@ -85,20 +86,24 @@ export default class App extends React.Component {
     return (
       <>
         <StatusBar backgroundColor={colors.blue} />
+
         <Container colors={[colors.blue, colors.purple]}>
           <Contents>
             <Time onPress={this.openTimePicker} date={date} />
             <SleepDuration>
               You're going to get {sleepDuration} hours of sleep
             </SleepDuration>
-            <DateTimePicker
-              mode="time"
-              isVisible={isTimePickerVisible}
-              onCancel={this.handleAlarmCancel}
-              onConfirm={this.handleAlarmChange}
-            />
           </Contents>
+
+          <Options setAlarm={this.openTimePicker} />
         </Container>
+
+        <DateTimePicker
+          mode="time"
+          isVisible={isTimePickerVisible}
+          onCancel={this.handleAlarmCancel}
+          onConfirm={this.handleAlarmChange}
+        />
       </>
     )
   }
