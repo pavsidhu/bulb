@@ -1,14 +1,21 @@
 import React from 'react'
-import { StatusBar, Text, TouchableWithoutFeedback } from 'react-native'
+import { Dimensions, StatusBar } from 'react-native'
 import styled from 'styled-components'
+import LinearGradient from 'react-native-linear-gradient'
 import DateTimePicker from 'react-native-modal-datetime-picker'
+import dayjs from 'dayjs'
+
+import Time from './components/Time'
+import config from './config.json'
 import styles from './styles'
+
+const { width } = Dimensions.get('window')
 
 const { colors } = styles
 
-const Container = styled.View`
+const Container = styled(LinearGradient)`
   flex: 1;
-  background-color: ${colors.primary};
+  background-color: ${colors.purple};
   align-items: center;
   justify-content: center;
 `
@@ -25,37 +32,17 @@ const Contents = styled.View`
   justify-content: center;
 `
 
-const TimeContainer = styled.View`
-  flex-direction: row;
-  align-items: flex-end;
-  margin-bottom: 8px;
-`
-
-const Time = styled.Text`
-  font-size: 48px;
-  line-height: 56px;
-  color: ${colors.secondary};
-`
-
-const TimeSuffix = styled.Text`
-  font-size: 20px;
-  line-height: 42px;
-  color: ${colors.secondary};
-  margin-left: 4px;
-`
-
 const SleepDuration = styled.Text`
   font-size: 18px;
   line-height: 24px;
-  color: ${colors.secondary};
+  color: ${colors.white};
+  text-align: center;
+  max-width: ${width - 64}px;
 `
 
 export default class App extends React.Component {
   state = {
-    time: {
-      hours: 8,
-      minutes: 0
-    },
+    date: dayjs().toString(),
     isTimePickerVisible: false
   }
 
@@ -67,6 +54,14 @@ export default class App extends React.Component {
     this.handleAlarmChange = this.handleAlarmChange.bind(this)
   }
 
+  calculateSleepDuration() {
+    const currentDate = dayjs()
+    const alarmDate = dayjs(this.state.date)
+    const difference = currentDate.diff(alarmDate, 'hours', true)
+
+    return difference.toFixed(2)
+  }
+
   openTimePicker() {
     this.setState({ isTimePickerVisible: true })
   }
@@ -76,47 +71,29 @@ export default class App extends React.Component {
   }
 
   handleAlarmChange(date) {
-    const hours = date.getHours()
-    const minutes = date.getMinutes()
-
     this.setState({
-      time: { hours, minutes },
+      date: dayjs(date).toString(),
       isTimePickerVisible: false
     })
   }
 
   render() {
-    const { time, isTimePickerVisible } = this.state
+    const { date, isTimePickerVisible } = this.state
 
-    const hours = time.hours.toString().padStart(2, '0')
-    const minutes = time.minutes.toString().padStart(2, '0')
-
-    const sleepDuration = 5
+    const sleepDuration = this.calculateSleepDuration()
 
     return (
       <>
-        <StatusBar backgroundColor={colors.primary} />
-        <Container>
-          <Header>
-            <Text> </Text>
-          </Header>
-
+        <StatusBar backgroundColor={colors.blue} />
+        <Container colors={[colors.blue, colors.purple]}>
           <Contents>
-            <TimeContainer>
-              <TouchableWithoutFeedback onPress={this.openTimePicker}>
-                <Time>{hours + ':' + minutes}</Time>
-              </TouchableWithoutFeedback>
-              <TimeSuffix>am</TimeSuffix>
-            </TimeContainer>
-
+            <Time onPress={this.openTimePicker} date={date} />
             <SleepDuration>
-              You're going to get {sleepDuration} hours sleep
+              You're going to get {sleepDuration} hours of sleep
             </SleepDuration>
-
             <DateTimePicker
               mode="time"
               isVisible={isTimePickerVisible}
-              backgroundColor={colors.primary}
               onCancel={this.handleAlarmCancel}
               onConfirm={this.handleAlarmChange}
             />
