@@ -4,26 +4,28 @@ export default class Lifx {
     this.baseUrl = 'https://api.lifx.com/v1'
   }
 
-  async setState(options) {
-    console.log(`${this.baseUrl}/lights/all/state`)
-    console.log({
-      method: 'PUT',
-      headers: {
-        Authorization: 'Bearer ' + this.token,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(options)
-    })
-    const response = await fetch(`${this.baseUrl}/lights/all/state`, {
-      method: 'PUT',
+  api(url, { method = 'GET', body = {} }) {
+    return fetch(this.baseUrl + url, {
+      method,
       headers: {
         Authorization: 'Bearer ' + this.token,
         Accept: 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(options)
+      body: JSON.stringify(body)
     })
+  }
 
+  async setState(body) {
+    const response = await this.api('/lights/all/state', {
+      method: 'PUT',
+      body
+    })
     return response.status === 202
+  }
+
+  async getState() {
+    const response = await this.api('/lights/all')
+    return response
   }
 }
