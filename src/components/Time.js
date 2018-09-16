@@ -26,8 +26,9 @@ const Suffix = styled.Text`
 `
 
 export default function Time(props) {
-  const time = dayjs(props.date).format('h:mm')
-  const suffix = dayjs(props.date).format('A')
+  const alarm = dayjs().add(props.alarm, 'millisecond')
+  const time = alarm.format('h:mm')
+  const suffix = alarm.format('A')
 
   return (
     <TouchableWithoutFeedback onPress={props.onPress}>

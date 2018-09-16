@@ -6,12 +6,12 @@ import DateTimePicker from 'react-native-modal-datetime-picker'
 import dayjs from 'dayjs'
 
 import Time from './components/Time'
-import Options from './components/Options'
+import Buttons from './components/Buttons'
 import config from './config.json'
 import styles from './styles'
 
-const { width } = Dimensions.get('window')
 
+const { width } = Dimensions.get('window')
 const { colors } = styles
 
 const Container = styled(LinearGradient)`
@@ -21,14 +21,8 @@ const Container = styled(LinearGradient)`
   justify-content: center;
 `
 
-const Header = styled.View`
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-`
-
 const Contents = styled.View`
-  flex: 2;
+  flex: 1;
   align-items: center;
   justify-content: center;
 `
@@ -43,8 +37,8 @@ const SleepDuration = styled.Text`
 
 export default class App extends React.Component {
   state = {
-    date: dayjs().toString(),
-    isTimePickerVisible: false
+    alarm: 3.6 * Math.pow(10, 6),
+    isTimePickerVisible: false,
   }
 
   constructor(props) {
@@ -56,9 +50,10 @@ export default class App extends React.Component {
   }
 
   calculateSleepDuration() {
-    const currentDate = dayjs()
-    const alarmDate = dayjs(this.state.date)
-    const difference = currentDate.diff(alarmDate, 'hours', true)
+    const { alarm } = this.state
+
+    const alarmDate = dayjs().add(alarm, 'millisecond')
+    const difference = alarmDate.diff(dayjs(), 'hours', true)
 
     return Math.abs(difference.toFixed(2))
   }
@@ -72,14 +67,21 @@ export default class App extends React.Component {
   }
 
   handleAlarmChange(date) {
+    const alarmDate = dayjs(date)
+    const timeDifference = alarmDate.diff(dayjs(), 'millisecond', true)
+
+    // Alarm adjusted so that it's in the future
+    const dayInMs = 8.64 * Math.pow(10, 7)
+    const alarm = timeDifference < 0 ? timeDifference + dayInMs : timeDifference
+
     this.setState({
-      date: dayjs(date).toString(),
+      alarm,
       isTimePickerVisible: false
     })
   }
 
   render() {
-    const { date, isTimePickerVisible } = this.state
+    const { alarm, isTimePickerVisible } = this.state
 
     const sleepDuration = this.calculateSleepDuration()
 
@@ -89,20 +91,23 @@ export default class App extends React.Component {
 
         <Container colors={[colors.blue, colors.purple]}>
           <Contents>
-            <Time onPress={this.openTimePicker} date={date} />
+            <Time alarm={alarm} onPress={this.openTimePicker} />
             <SleepDuration>
               You're going to get {sleepDuration} hours of sleep
             </SleepDuration>
           </Contents>
 
-          <Options setAlarm={this.openTimePicker} />
+          <Buttons
+            setAlarm={this.openTimePicker}
+            onToggleBulb={this.getLifxColor}
+          />
         </Container>
 
         <DateTimePicker
           mode="time"
           isVisible={isTimePickerVisible}
-          onCancel={this.handleAlarmCancel}
           onConfirm={this.handleAlarmChange}
+          onCancel={this.handleAlarmCancel}
         />
       </>
     )
