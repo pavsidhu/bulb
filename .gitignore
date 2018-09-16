@@ -56,4 +56,6 @@ buck-out/
 *.jsbundle
 
 # Other
+*.ai
+*.sketch
 config.json
