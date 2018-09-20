@@ -4,12 +4,18 @@ import styled from 'styled-components/native'
 import LinearGradient from 'react-native-linear-gradient'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import RNAlarm from 'react-native-alarms'
+import Sound from 'react-native-sound'
 import dayjs from 'dayjs'
 
 import Time from './components/Time'
 import Buttons from './components/Buttons'
 import styles from './styles'
 
+const alarmSound = new Sound(
+  'sunshower.ogg',
+  Sound.MAIN_BUNDLE,
+  () => undefined
+)
 
 const { width } = Dimensions.get('window')
 const { colors } = styles
@@ -71,6 +77,9 @@ export default class App extends React.Component<{}, State> {
     RNAlarm.launchMainActivity()
 
     this.setState({ isAlarmActivated: true })
+
+    alarmSound.setSystemVolume(0.5)
+    alarmSound.play(() => alarmSound.setSystemVolume(0))
   }
 
   calculateSleepDuration() {
@@ -97,7 +106,12 @@ export default class App extends React.Component<{}, State> {
         ? date.add(1, 'day').toDate()
         : date.toDate()
 
-    RNAlarm.alarmSetRTCWakeup('alarm', alarm)
+    RNAlarm.alarmSetRTCWakeup(
+      'alarm',
+      dayjs()
+        .add(3, 'second')
+        .toDate()
+    )
 
     this.setState({
       alarm,
