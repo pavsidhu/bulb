@@ -13,6 +13,7 @@
     "react-native-alarms": "git+https://github.com/ioddly/react-native-alarms.git",
     "react-native-linear-gradient": "^2.4.0",
     "react-native-modal-datetime-picker": "^6.0.0",
+    "react-native-sound": "^0.10.9",
     "styled-components": "^3.4.9"
   },
   "devDependencies": {
