@@ -71,7 +71,7 @@ export default class App extends React.Component<{}, State> {
     // Adjust alarm so that it's in the future
     const date = dayjs(jsDate)
     const alarm =
-      date.diff(dayjs(), 'minute') <= 0
+      date.diff(dayjs(), 'millisecond') <= 0
         ? date.add(1, 'day').toDate()
         : date.toDate()
 
