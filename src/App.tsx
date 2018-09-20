@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import { Dimensions, StatusBar } from 'react-native'
 import styled from 'styled-components/native'
 import LinearGradient from 'react-native-linear-gradient'
@@ -53,7 +53,7 @@ export default class App extends React.Component {
     const alarmDate = dayjs().add(alarm, 'millisecond')
     const difference = alarmDate.diff(dayjs(), 'hour', true)
 
-    return Math.abs(difference.toFixed(2))
+    return Math.abs(parseInt(difference.toFixed(2)))
   }
 
   openTimePicker() {

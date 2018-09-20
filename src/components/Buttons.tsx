@@ -1,11 +1,7 @@
-import React from 'react'
+import * as React from 'react'
 import styled from 'styled-components/native'
 
 import Button from './Button'
-import Lifx from '../lifx'
-import config from '../config'
-
-const lifx = new Lifx(config.token)
 
 const Container = styled.View`
   flex-direction: row;
@@ -17,25 +13,13 @@ interface Props {
   setAlarm: () => void
 }
 
-interface State {
-  isBulbOn: boolean
-}
-
-export default class Buttons extends React.Component<Props, State> {
-  state = {
-    isBulbOn: false
-  }
-
+export default class Buttons extends React.Component<Props> {
   constructor(props: Props) {
     super(props)
-
     this.toggleBulb = this.toggleBulb.bind(this)
   }
 
   toggleBulb() {
-    const isBulbOn = !this.state.isBulbOn
-    this.setState({ isBulbOn })
-
     setTimeout(this.props.onToggleBulb, 1000)
   }
 
