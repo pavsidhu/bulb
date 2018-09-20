@@ -9,8 +9,10 @@ const Container = styled.View`
 `
 
 interface Props {
+  isAlarmActivated: boolean
   onToggleBulb: () => void
   setAlarm: () => void
+  disableAlarm: () => void
 }
 
 export default class Buttons extends React.Component<Props> {
@@ -26,8 +28,14 @@ export default class Buttons extends React.Component<Props> {
   render() {
     return (
       <Container>
-        <Button onPress={this.toggleBulb} text="Toggle Bulb" />
-        <Button onPress={this.props.setAlarm} text="Set Alarm" />
+        {this.props.isAlarmActivated ? (
+          <Button onPress={this.props.disableAlarm} text="I'm Wake" />
+        ) : (
+          <>
+            <Button onPress={this.props.onToggleBulb} text="Toggle Bulb" />
+            <Button onPress={this.props.setAlarm} text="Set Alarm" />
+          </>
+        )}
       </Container>
     )
   }

@@ -45,13 +45,15 @@ interface State {
   alarm?: Date
   isAlarmActivated: boolean
   isTimePickerVisible: boolean
+  isStateHydrated: boolean
 }
 
 export default class App extends React.Component<{}, State> {
   state = {
     alarm: undefined,
     isAlarmActivated: false,
-    isTimePickerVisible: false
+    isTimePickerVisible: false,
+    stateHydrated: false
   }
 
   constructor(props: {}) {
@@ -60,6 +62,7 @@ export default class App extends React.Component<{}, State> {
     this.toggleTimePicker = this.toggleTimePicker.bind(this)
     this.handleAlarmChange = this.handleAlarmChange.bind(this)
     this.handleAlarm = this.handleAlarm.bind(this)
+    this.disableAlarm = this.disableAlarm.bind(this)
 
     RNAlarm.AlarmEmitter.addListener('alarm', this.handleAlarm)
   }
@@ -69,17 +72,11 @@ export default class App extends React.Component<{}, State> {
 
     if (item) {
       const state = JSON.parse(item)
+
       this.setState(state)
     }
-  }
 
-  handleAlarm() {
-    RNAlarm.launchMainActivity()
-
-    this.setState({ isAlarmActivated: true })
-
-    alarmSound.setSystemVolume(0.5)
-    alarmSound.play(() => alarmSound.setSystemVolume(0))
+    this.setState({ isStateHydrated: true })
   }
 
   calculateSleepDuration() {
@@ -119,10 +116,31 @@ export default class App extends React.Component<{}, State> {
     })
   }
 
+  handleAlarm() {
+    RNAlarm.launchMainActivity()
+
+    this.setState({ isAlarmActivated: true })
+
+    alarmSound
+      .setSystemVolume(0.5)
+      .setNumberOfLoops(-1)
+      .play()
+  }
+
+  disableAlarm() {
+    this.setState({ isAlarmActivated: false })
+    alarmSound.stop()
+  }
+
   render() {
     AsyncStorage.setItem('state', JSON.stringify(this.state))
 
-    const { alarm, isTimePickerVisible } = this.state
+    const {
+      alarm,
+      isTimePickerVisible,
+      isAlarmActivated,
+      isStateHydrated
+    } = this.state
 
     const sleepDuration = this.calculateSleepDuration()
 
@@ -131,17 +149,23 @@ export default class App extends React.Component<{}, State> {
         <StatusBar backgroundColor={colors.blue} />
 
         <Container colors={[colors.blue, colors.purple]}>
-          <Contents>
-            <Time alarm={alarm} onPress={this.toggleTimePicker} />
-            <SleepDuration>
-              You're going to get {sleepDuration} hours of sleep
-            </SleepDuration>
-          </Contents>
+          {isStateHydrated && (
+            <>
+              <Contents>
+                <Time alarm={alarm} onPress={this.toggleTimePicker} />
+                <SleepDuration>
+                  You're going to get {sleepDuration} hours of sleep
+                </SleepDuration>
+              </Contents>
 
-          <Buttons
-            setAlarm={this.toggleTimePicker}
-            onToggleBulb={() => undefined}
-          />
+              <Buttons
+                isAlarmActivated={isAlarmActivated}
+                setAlarm={this.toggleTimePicker}
+                onToggleBulb={() => undefined}
+                disableAlarm={this.disableAlarm}
+              />
+            </>
+          )}
         </Container>
 
         <DateTimePicker
