@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Dimensions, StatusBar } from 'react-native'
+import { AsyncStorage, Dimensions, StatusBar } from 'react-native'
 import styled from 'styled-components/native'
 import LinearGradient from 'react-native-linear-gradient'
 import DateTimePicker from 'react-native-modal-datetime-picker'
@@ -54,6 +54,15 @@ export default class App extends React.Component<{}, State> {
     this.handleAlarmChange = this.handleAlarmChange.bind(this)
   }
 
+  async componentWillMount() {
+    const item = await AsyncStorage.getItem('state')
+
+    if (item) {
+      const state = JSON.parse(item)
+      this.setState(state)
+    }
+  }
+
   calculateSleepDuration() {
     if (!this.state.alarm) {
       return undefined
@@ -87,6 +96,8 @@ export default class App extends React.Component<{}, State> {
   }
 
   render() {
+    AsyncStorage.setItem('state', JSON.stringify(this.state))
+
     const { alarm, isTimePickerVisible } = this.state
 
     const sleepDuration = this.calculateSleepDuration()
