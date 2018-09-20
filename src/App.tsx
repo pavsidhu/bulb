@@ -3,11 +3,14 @@ import { Dimensions, StatusBar } from 'react-native'
 import styled from 'styled-components/native'
 import LinearGradient from 'react-native-linear-gradient'
 import DateTimePicker from 'react-native-modal-datetime-picker'
+import RNAlarm from 'react-native-alarms'
 import dayjs from 'dayjs'
 
 import Time from './components/Time'
 import Buttons from './components/Buttons'
 import styles from './styles'
+
+RNAlarm.AlarmEmitter.addListener('alarm', () => RNAlarm.launchMainActivity())
 
 const { width } = Dimensions.get('window')
 const { colors } = styles
@@ -75,6 +78,7 @@ export default class App extends React.Component<{}, State> {
         ? date.add(1, 'day').toDate()
         : date.toDate()
 
+    RNAlarm.alarmSetRTCWakeup('alarm', alarm)
 
     this.setState({
       alarm,
