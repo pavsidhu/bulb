@@ -4,15 +4,15 @@ export default class Lifx {
     this.baseUrl = 'https://api.lifx.com/v1'
   }
 
-  api(url, { method = 'GET', body = {} }) {
+  api(url, options = {}) {
     return fetch(this.baseUrl + url, {
-      method,
+      method: options.method || 'GET',
       headers: {
         Authorization: 'Bearer ' + this.token,
         Accept: 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify(options.body)
     })
   }
 
