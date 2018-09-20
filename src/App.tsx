@@ -10,7 +10,6 @@ import Time from './components/Time'
 import Buttons from './components/Buttons'
 import styles from './styles'
 
-RNAlarm.AlarmEmitter.addListener('alarm', () => RNAlarm.launchMainActivity())
 
 const { width } = Dimensions.get('window')
 const { colors } = styles
@@ -38,12 +37,14 @@ const SleepDuration = styled.Text`
 
 interface State {
   alarm?: Date
+  isAlarmActivated: boolean
   isTimePickerVisible: boolean
 }
 
 export default class App extends React.Component<{}, State> {
   state = {
     alarm: undefined,
+    isAlarmActivated: false,
     isTimePickerVisible: false
   }
 
@@ -52,6 +53,9 @@ export default class App extends React.Component<{}, State> {
 
     this.toggleTimePicker = this.toggleTimePicker.bind(this)
     this.handleAlarmChange = this.handleAlarmChange.bind(this)
+    this.handleAlarm = this.handleAlarm.bind(this)
+
+    RNAlarm.AlarmEmitter.addListener('alarm', this.handleAlarm)
   }
 
   async componentWillMount() {
@@ -61,6 +65,12 @@ export default class App extends React.Component<{}, State> {
       const state = JSON.parse(item)
       this.setState(state)
     }
+  }
+
+  handleAlarm() {
+    RNAlarm.launchMainActivity()
+
+    this.setState({ isAlarmActivated: true })
   }
 
   calculateSleepDuration() {
