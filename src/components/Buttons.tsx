@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled from 'styled-components/native'
 
 import Button from './Button'
 import Lifx from '../lifx'
@@ -12,12 +12,21 @@ const Container = styled.View`
   margin-bottom: 24px;
 `
 
-export default class Buttons extends React.Component {
+interface Props {
+  onToggleBulb: () => void
+  setAlarm: () => void
+}
+
+interface State {
+  isBulbOn: boolean
+}
+
+export default class Buttons extends React.Component<Props, State> {
   state = {
     isBulbOn: false
   }
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props)
 
     this.toggleBulb = this.toggleBulb.bind(this)
@@ -26,10 +35,6 @@ export default class Buttons extends React.Component {
   toggleBulb() {
     const isBulbOn = !this.state.isBulbOn
     this.setState({ isBulbOn })
-
-    lifx.setState({
-      power: isBulbOn ? 'off' : 'on'
-    })
 
     setTimeout(this.props.onToggleBulb, 1000)
   }

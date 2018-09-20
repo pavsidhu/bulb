@@ -1,6 +1,7 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled from 'styled-components/native'
 import styles from '../styles'
+import { TouchableWithoutFeedback } from 'react-native'
 
 const { colors } = styles
 
@@ -18,12 +19,17 @@ const Text = styled.Text`
   color: ${colors.white};
 `
 
-export default function Button(props) {
+interface Props {
+  onPress: () => void
+  text: string
+}
+
+export default function Button(props: Props) {
   return (
     <Container>
-      <Text icon={props.icon} onPress={props.onPress}>
-        {props.text}
-      </Text>
+      <TouchableWithoutFeedback onPress={props.onPress}>
+        <Text>{props.text}</Text>
+      </TouchableWithoutFeedback>
     </Container>
   )
 }

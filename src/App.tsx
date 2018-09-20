@@ -1,15 +1,13 @@
 import React from 'react'
 import { Dimensions, StatusBar } from 'react-native'
-import styled from 'styled-components'
+import styled from 'styled-components/native'
 import LinearGradient from 'react-native-linear-gradient'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import dayjs from 'dayjs'
 
 import Time from './components/Time'
 import Buttons from './components/Buttons'
-import config from './config.json'
 import styles from './styles'
-
 
 const { width } = Dimensions.get('window')
 const { colors } = styles
@@ -38,10 +36,10 @@ const SleepDuration = styled.Text`
 export default class App extends React.Component {
   state = {
     alarm: 3.6 * Math.pow(10, 6),
-    isTimePickerVisible: false,
+    isTimePickerVisible: false
   }
 
-  constructor(props) {
+  constructor(props: {}) {
     super(props)
 
     this.openTimePicker = this.openTimePicker.bind(this)
@@ -53,7 +51,7 @@ export default class App extends React.Component {
     const { alarm } = this.state
 
     const alarmDate = dayjs().add(alarm, 'millisecond')
-    const difference = alarmDate.diff(dayjs(), 'hours', true)
+    const difference = alarmDate.diff(dayjs(), 'hour', true)
 
     return Math.abs(difference.toFixed(2))
   }
@@ -66,7 +64,7 @@ export default class App extends React.Component {
     this.setState({ isTimePickerVisible: false })
   }
 
-  handleAlarmChange(date) {
+  handleAlarmChange(date: Date) {
     const alarmDate = dayjs(date)
     const timeDifference = alarmDate.diff(dayjs(), 'millisecond', true)
 
@@ -99,7 +97,7 @@ export default class App extends React.Component {
 
           <Buttons
             setAlarm={this.openTimePicker}
-            onToggleBulb={this.getLifxColor}
+            onToggleBulb={() => undefined}
           />
         </Container>
 

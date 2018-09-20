@@ -1,10 +1,19 @@
+interface SetState {
+  power: string
+  color: string
+  brightness: number
+  duration: number
+}
+
 export default class Lifx {
-  constructor(token) {
+  private token: string
+  private baseUrl = 'https://api.lifx.com/v1'
+
+  constructor(token: string) {
     this.token = token
-    this.baseUrl = 'https://api.lifx.com/v1'
   }
 
-  api(url, options = {}) {
+  api(url: string, options: { method?: string; body?: object } = {}) {
     return fetch(this.baseUrl + url, {
       method: options.method || 'GET',
       headers: {
@@ -16,7 +25,7 @@ export default class Lifx {
     })
   }
 
-  async setState(body) {
+  async setState(body: SetState) {
     const response = await this.api('/lights/all/state', {
       method: 'PUT',
       body

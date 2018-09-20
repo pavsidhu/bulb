@@ -1,6 +1,6 @@
 import React from 'react'
 import { TouchableWithoutFeedback } from 'react-native'
-import styled from 'styled-components'
+import styled from 'styled-components/native'
 import dayjs from 'dayjs'
 import styles from '../styles'
 
@@ -25,7 +25,12 @@ const Suffix = styled.Text`
   margin-left: 4px;
 `
 
-export default function Time(props) {
+interface Props {
+  alarm: any
+  onPress: () => void
+}
+
+export default function Time(props: Props) {
   const alarm = dayjs().add(props.alarm, 'millisecond')
   const time = alarm.format('h:mm')
   const suffix = alarm.format('A')

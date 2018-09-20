@@ -58,4 +58,4 @@ buck-out/
 # Other
 *.ai
 *.sketch
-config.json
+config.ts
