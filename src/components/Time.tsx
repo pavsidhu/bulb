@@ -31,7 +31,7 @@ interface Props {
 }
 
 export default function Time(props: Props) {
-  const alarm = dayjs().add(props.alarm, 'millisecond')
+  const alarm = dayjs(props.alarm)
   const time = alarm.format('h:mm')
   const suffix = alarm.format('A')
 

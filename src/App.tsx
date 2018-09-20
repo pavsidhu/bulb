@@ -33,44 +33,48 @@ const SleepDuration = styled.Text`
   max-width: ${width - 64}px;
 `
 
-export default class App extends React.Component {
+interface State {
+  alarm?: Date
+  isTimePickerVisible: boolean
+}
+
+export default class App extends React.Component<{}, State> {
   state = {
-    alarm: 3.6 * Math.pow(10, 6),
+    alarm: undefined,
     isTimePickerVisible: false
   }
 
   constructor(props: {}) {
     super(props)
 
-    this.openTimePicker = this.openTimePicker.bind(this)
-    this.handleAlarmCancel = this.handleAlarmCancel.bind(this)
+    this.toggleTimePicker = this.toggleTimePicker.bind(this)
     this.handleAlarmChange = this.handleAlarmChange.bind(this)
   }
 
   calculateSleepDuration() {
-    const { alarm } = this.state
+    if (!this.state.alarm) {
+      return undefined
+    }
 
-    const alarmDate = dayjs().add(alarm, 'millisecond')
-    const difference = alarmDate.diff(dayjs(), 'hour', true)
+    const alarm = dayjs(this.state.alarm)
+    const difference = alarm.diff(dayjs(), 'hour', true)
 
-    return Math.abs(parseInt(difference.toFixed(2)))
+    return Math.abs(parseFloat(difference.toFixed(2)))
   }
 
-  openTimePicker() {
-    this.setState({ isTimePickerVisible: true })
+  toggleTimePicker() {
+    const isTimePickerVisible = !this.state.isTimePickerVisible
+    this.setState({ isTimePickerVisible })
   }
 
-  handleAlarmCancel() {
-    this.setState({ isTimePickerVisible: false })
-  }
+  handleAlarmChange(jsDate: Date) {
+    // Adjust alarm so that it's in the future
+    const date = dayjs(jsDate)
+    const alarm =
+      date.diff(dayjs(), 'minute') <= 0
+        ? date.add(1, 'day').toDate()
+        : date.toDate()
 
-  handleAlarmChange(date: Date) {
-    const alarmDate = dayjs(date)
-    const timeDifference = alarmDate.diff(dayjs(), 'millisecond', true)
-
-    // Alarm adjusted so that it's in the future
-    const dayInMs = 8.64 * Math.pow(10, 7)
-    const alarm = timeDifference < 0 ? timeDifference + dayInMs : timeDifference
 
     this.setState({
       alarm,
@@ -89,14 +93,14 @@ export default class App extends React.Component {
 
         <Container colors={[colors.blue, colors.purple]}>
           <Contents>
-            <Time alarm={alarm} onPress={this.openTimePicker} />
+            <Time alarm={alarm} onPress={this.toggleTimePicker} />
             <SleepDuration>
               You're going to get {sleepDuration} hours of sleep
             </SleepDuration>
           </Contents>
 
           <Buttons
-            setAlarm={this.openTimePicker}
+            setAlarm={this.toggleTimePicker}
             onToggleBulb={() => undefined}
           />
         </Container>
@@ -105,7 +109,7 @@ export default class App extends React.Component {
           mode="time"
           isVisible={isTimePickerVisible}
           onConfirm={this.handleAlarmChange}
-          onCancel={this.handleAlarmCancel}
+          onCancel={this.toggleTimePicker}
         />
       </>
     )
