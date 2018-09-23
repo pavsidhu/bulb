@@ -1,4 +1,4 @@
-interface SetState {
+export interface LifxState {
   power?: string
   color?: string
   brightness?: number
@@ -25,7 +25,7 @@ export default class Lifx {
     })
   }
 
-  async setState(body: SetState) {
+  async setState(body: LifxState) {
     const response = await this.api('/lights/all/state', {
       method: 'PUT',
       body
