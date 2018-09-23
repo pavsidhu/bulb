@@ -11,7 +11,7 @@ const Container = styled.View`
   border-radius: 32px;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 2550, 0.2);
+  background: rgba(255, 255, 255, 0.2);
 `
 
 const Text = styled.Text`
