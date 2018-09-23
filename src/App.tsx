@@ -10,6 +10,11 @@ import dayjs from 'dayjs'
 import Time from './components/Time'
 import Buttons from './components/Buttons'
 import styles from './styles'
+import Lifx from './lifx'
+import config from './config'
+
+const lifx = new Lifx(config.token)
+
 Sound.setCategory('Alarm')
 
 const alarmSound = new Sound(
@@ -66,6 +71,7 @@ export default class App extends React.Component<{}, State> {
     this.disableAlarm = this.disableAlarm.bind(this)
 
     RNAlarm.AlarmEmitter.addListener('alarm', this.handleAlarm)
+    RNAlarm.AlarmEmitter.addListener('pre-alarm', this.handlePreAlarm)
   }
 
   async componentWillMount() {
@@ -104,10 +110,12 @@ export default class App extends React.Component<{}, State> {
         ? date.add(1, 'day').toDate()
         : date.toDate()
 
+    RNAlarm.alarmSetRTCWakeup('alarm', alarm)
+
     RNAlarm.alarmSetRTCWakeup(
-      'alarm',
-      dayjs()
-        .add(3, 'second')
+      'pre-alarm',
+      dayjs(alarm)
+        .subtract(30, 'minute')
         .toDate()
     )
 
@@ -126,6 +134,14 @@ export default class App extends React.Component<{}, State> {
       .setSystemVolume(0.5)
       .setNumberOfLoops(-1)
       .play()
+  }
+
+  handlePreAlarm() {
+    lifx.setState({
+      power: 'on',
+      color: 'kelvin:9000 brightness:1.0',
+      duration: 1800 // seconds in 30 minutes
+    })
   }
 
   disableAlarm() {
