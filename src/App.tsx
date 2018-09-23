@@ -10,7 +10,7 @@ import dayjs from 'dayjs'
 import Time from './components/Time'
 import Buttons from './components/Buttons'
 import styles from './styles'
-import Lifx from './lifx'
+import Lifx, { LifxState } from './lifx'
 import config from './config'
 
 const lifx = new Lifx(config.token)
@@ -52,6 +52,7 @@ interface State {
   isAlarmActivated: boolean
   isTimePickerVisible: boolean
   isStateHydrated: boolean
+  bulbState?: LifxState
 }
 
 export default class App extends React.Component<{}, State> {
@@ -59,7 +60,8 @@ export default class App extends React.Component<{}, State> {
     alarm: undefined,
     isAlarmActivated: false,
     isTimePickerVisible: false,
-    isStateHydrated: false
+    isStateHydrated: false,
+    bulbState: undefined
   }
 
   constructor(props: {}) {
@@ -83,7 +85,12 @@ export default class App extends React.Component<{}, State> {
       this.setState(state)
     }
 
-    this.setState({ isStateHydrated: true })
+    const bulbState = await lifx.getState()
+
+    this.setState({
+      isStateHydrated: true,
+      bulbState
+    })
   }
 
   calculateSleepDuration() {
