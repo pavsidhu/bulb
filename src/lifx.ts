@@ -38,6 +38,8 @@ export default class Lifx {
 
   async getState() {
     const response = await this.api('/lights/all')
-    return response
+    const data = await response.json()
+
+    return data[0]
   }
 }
