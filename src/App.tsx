@@ -131,6 +131,7 @@ export default class App extends React.Component<{}, State> {
     this.setState({ isAlarmActivated: true })
 
     alarmSound
+      // @ts-ignore
       .setSystemVolume(0.5)
       .setNumberOfLoops(-1)
       .play()
