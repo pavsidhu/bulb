@@ -10,6 +10,7 @@ import dayjs from 'dayjs'
 import Time from './components/Time'
 import Buttons from './components/Buttons'
 import styles from './styles'
+Sound.setCategory('Alarm')
 
 const alarmSound = new Sound(
   'sunshower.ogg',

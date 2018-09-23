@@ -4170,9 +4170,9 @@ react-native-modal@^6.2.0:
     prop-types "^15.6.1"
     react-native-animatable "^1.2.4"
 
-react-native-sound@^0.10.9:
+"react-native-sound@git+https://github.com/pavsidhu/react-native-sound.git#patch-1":
   version "0.10.9"
-  resolved "https://registry.yarnpkg.com/react-native-sound/-/react-native-sound-0.10.9.tgz#6b00b0f4afd017cde09fbb9d171df1b5d5b851a8"
+  resolved "git+https://github.com/pavsidhu/react-native-sound.git#b3037b14e2bc9418c4c1bbe98cc3c6cba95a9d47"
 
 react-native-typescript-transformer@^1.2.10:
   version "1.2.10"
