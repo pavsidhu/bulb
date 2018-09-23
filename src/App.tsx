@@ -39,7 +39,7 @@ const Contents = styled.View`
   justify-content: center;
 `
 
-const SleepDuration = styled.Text`
+const Message = styled.Text`
   font-size: 18px;
   line-height: 24px;
   color: ${colors.white};
@@ -170,9 +170,13 @@ export default class App extends React.Component<{}, State> {
             <>
               <Contents>
                 <Time alarm={alarm} onPress={this.toggleTimePicker} />
-                <SleepDuration>
-                  You're going to get {sleepDuration} hours of sleep
-                </SleepDuration>
+                <Message>
+                  {isAlarmActivated
+                    ? 'Good morning Pav!'
+                    : sleepDuration
+                      ? `You're going to get ${sleepDuration} hours of sleep`
+                      : "Hey Pav, how's it going?"}
+                </Message>
               </Contents>
 
               <Buttons
