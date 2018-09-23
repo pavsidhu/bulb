@@ -1,8 +1,8 @@
 interface SetState {
-  power: string
-  color: string
-  brightness: number
-  duration: number
+  power?: string
+  color?: string
+  brightness?: number
+  duration?: number
 }
 
 export default class Lifx {
