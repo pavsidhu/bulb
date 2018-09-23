@@ -28,7 +28,10 @@ export default class Lifx {
   async setState(body: LifxState) {
     const response = await this.api('/lights/all/state', {
       method: 'PUT',
-      body
+      body: {
+        ...body,
+        fast: true
+      }
     })
     return response.status === 202
   }
