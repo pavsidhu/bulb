@@ -53,7 +53,7 @@ export default class App extends React.Component<{}, State> {
     alarm: undefined,
     isAlarmActivated: false,
     isTimePickerVisible: false,
-    stateHydrated: false
+    isStateHydrated: false
   }
 
   constructor(props: {}) {
