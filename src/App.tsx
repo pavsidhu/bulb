@@ -71,6 +71,7 @@ export default class App extends React.Component<{}, State> {
     this.handleAlarmChange = this.handleAlarmChange.bind(this)
     this.handleAlarm = this.handleAlarm.bind(this)
     this.disableAlarm = this.disableAlarm.bind(this)
+    this.toggleBulb = this.toggleBulb.bind(this)
 
     RNAlarm.AlarmEmitter.addListener('alarm', this.handleAlarm)
     RNAlarm.AlarmEmitter.addListener('pre-alarm', this.handlePreAlarm)
@@ -157,6 +158,17 @@ export default class App extends React.Component<{}, State> {
     alarmSound.stop()
   }
 
+  toggleBulb() {
+    const { bulbState } = this.state
+
+    if (bulbState) {
+      const power = bulbState.power === 'on' ? 'off' : 'on'
+
+      lifx.setState({ power })
+      this.setState({ bulbState: { ...bulbState, power } })
+    }
+  }
+
   render() {
     AsyncStorage.setItem('state', JSON.stringify(this.state))
 
@@ -190,7 +202,7 @@ export default class App extends React.Component<{}, State> {
               <Buttons
                 isAlarmActivated={isAlarmActivated}
                 setAlarm={this.toggleTimePicker}
-                onToggleBulb={() => undefined}
+                onToggleBulb={this.toggleBulb}
                 disableAlarm={this.disableAlarm}
               />
             </>
