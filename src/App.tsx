@@ -14,7 +14,7 @@ import config from './config'
 
 const lifx = new Lifx(config.token)
 
-Sound.setCategory('Alarm')
+Sound.setCategory('Alarm', false)
 
 const alarmSound = new Sound(
   'sunshower.ogg',
