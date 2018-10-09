@@ -1,17 +1,17 @@
 import * as React from 'react'
 import styled from 'styled-components/native'
 import styles from '../styles'
-import { TouchableWithoutFeedback } from 'react-native'
+import { TouchableOpacity } from 'react-native'
 
 const { colors } = styles
 
 const Container = styled.View`
   margin: 0 16px;
-  padding: 16px 24px;
-  border-radius: 32px;
+  padding: 32px 40px;
+  border-radius: 8px;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.2);
+  background: ${colors.lightPurple};
 `
 
 const Text = styled.Text`
@@ -26,10 +26,10 @@ interface Props {
 
 export default function Button(props: Props) {
   return (
-    <Container>
-      <TouchableWithoutFeedback onPress={props.onPress}>
+    <TouchableOpacity onPress={props.onPress} activeOpacity={0.5}>
+      <Container>
         <Text>{props.text}</Text>
-      </TouchableWithoutFeedback>
-    </Container>
+      </Container>
+    </TouchableOpacity>
   )
 }

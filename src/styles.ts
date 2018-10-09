@@ -1,7 +1,7 @@
 const styles = {
   colors: {
-    purple: '#2a2d60',
-    blue: '#39619E',
+    darkPurple: '#180B50',
+    lightPurple: '#3c287d',
     white: '#fefefe',
     black: '#313131'
   }

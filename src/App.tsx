@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { AsyncStorage, Dimensions, StatusBar } from 'react-native'
 import styled from 'styled-components/native'
-import LinearGradient from 'react-native-linear-gradient'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import RNAlarm from 'react-native-alarms'
 import Sound from 'react-native-sound'
@@ -26,9 +25,9 @@ const alarmSound = new Sound(
 const { width } = Dimensions.get('window')
 const { colors } = styles
 
-const Container = styled(LinearGradient)`
+const Container = styled.View`
   flex: 1;
-  background-color: ${colors.purple};
+  background-color: ${colors.darkPurple};
   align-items: center;
   justify-content: center;
 `
@@ -183,9 +182,9 @@ export default class App extends React.Component<{}, State> {
 
     return (
       <>
-        <StatusBar backgroundColor={colors.blue} />
+        <StatusBar backgroundColor={colors.darkPurple} />
 
-        <Container colors={[colors.blue, colors.purple]}>
+        <Container>
           {isStateHydrated && (
             <>
               <Contents>
