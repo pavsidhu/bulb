@@ -60,3 +60,4 @@ buck-out/
 *.sketch
 config.ts
 TODO.md
+alarms
